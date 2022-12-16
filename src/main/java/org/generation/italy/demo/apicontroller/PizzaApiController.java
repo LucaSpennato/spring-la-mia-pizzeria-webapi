@@ -18,11 +18,15 @@ public class PizzaApiController {
 	@Autowired
 	private PizzaServ pr;
 	
-	@GetMapping
+	@GetMapping("/all")
 	public List<Pizza> getAllPizzas() {
 		
-		List<Pizza> pizzas = pr.findAll();
+		List<Pizza> pizzas = pr.findAllWithIngredients();
 		
+		System.err.println("TEST-------------------------");
+		for (Pizza pizza : pizzas) {
+			System.err.println(pizza.getIngredients());
+		}		
 		return pizzas;
 	}
 }

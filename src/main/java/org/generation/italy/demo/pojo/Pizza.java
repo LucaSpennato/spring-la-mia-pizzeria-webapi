@@ -1,12 +1,18 @@
 package org.generation.italy.demo.pojo;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -36,12 +42,31 @@ public class Pizza {
 	@Column
 	private int price;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Ingredient> ingredients;
+	
 	public Pizza() {}
 	
 	public Pizza(String name, String description, int price) {
 		setName(name);
 		setDescription(description);
 		setPrice(price);
+	}
+	
+	public Pizza(String name, String description, int price, Set<Ingredient> ingredients) {
+		setName(name);
+		setDescription(description);
+		setPrice(price);
+	}
+
+	
+	
+	public Set<Ingredient> getIngredients() {
+		return ingredients;
+	}
+
+	public void setIngredients(Set<Ingredient> ingredients) {
+		this.ingredients = ingredients;
 	}
 
 	public int getId() {
