@@ -2,6 +2,10 @@
   
   <div class="container">
     <div class="row">
+      <div class="col-12 mt-5">
+        <SearchComp  @emitSearch="searchPizza"/>
+      </div>
+
       <div class="col-10 m-auto py-5 my-5">
 
         <div v-if="!pizzaCreateForm">
@@ -107,10 +111,14 @@
 
 <script >
 import axios from 'axios';
+import SearchComp from './searchComp.vue';
 const HTTP = "http://localhost:8080/api/1/pizza/";
 
 export default {
   name: 'HelloWorld',
+  components:{
+    SearchComp,
+  },
   data(){
     return{
       pizzas: {},
@@ -124,6 +132,17 @@ export default {
     }
   },
   methods:{
+
+    searchPizza(query){
+      axios.get(HTTP + "search" , {params: {
+        needle: query
+      }})
+      .then(res =>{
+        console.log(res.data)
+        this.pizzas = res.data
+      })
+    },
+
     getPizzas(){
       axios.get(HTTP + "all")
       .then((response) =>{

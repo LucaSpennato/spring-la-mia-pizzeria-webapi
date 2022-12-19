@@ -33,6 +33,10 @@ public class PizzaServ {
 		return pr.findAll();
 	}
 	
+	public List<Pizza> findPizzaByName(String s){
+		return pr.findByNameContainingIgnoreCase(s);
+	}
+	
 	@Transactional
 	public List<Pizza> findAllWithIngredients(){
 		

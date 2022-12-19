@@ -1,5 +1,6 @@
 package org.generation.italy.demo.apicontroller;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -92,6 +94,18 @@ public class PizzaApiController {
 		return true;
 	}
 	
-	
-	
+	@GetMapping("/search")
+	public List<Pizza> searchPizzaByName(@RequestParam(name = "needle", required = false) String query){
+		
+		List<Pizza> result = new ArrayList<>();
+		
+		if(query != null){
+			result = pr.findPizzaByName(query);
+		}else {
+			result = pr.findAll();
+		}
+		
+		return result;
+	}
+ 	
 }
