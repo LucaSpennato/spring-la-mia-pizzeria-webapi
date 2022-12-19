@@ -47,13 +47,29 @@ public class SpringLaMiaPizzeriaWebapiApplication implements CommandLineRunner {
 		pr.save(p3);
 		
 		Set<Ingredient> ingredients1 = new HashSet<>();
+		Set<Ingredient> ingredients2 = new HashSet<>();
+		Set<Ingredient> ingredients3 = new HashSet<>();
+		
 		ingredients1.add(i1);
 		ingredients1.add(i2);
 		
+		ingredients2.add(i2);
+		ingredients2.add(i3);
+		
+		ingredients3.add(i1);
+		ingredients3.add(i3);
+		
 		Pizza pizz1 = pr.findById(1).get();
+		Pizza pizz2 = pr.findById(2).get();
+		Pizza pizz3 = pr.findById(3).get();
 		
 		pizz1.setIngredients(ingredients1);
+		pizz2.setIngredients(ingredients2);
+		pizz3.setIngredients(ingredients3);
+		
 		pr.save(pizz1);
+		pr.save(pizz2);
+		pr.save(pizz3);
 		
 	}
 

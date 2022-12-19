@@ -28,7 +28,7 @@ public class Pizza {
 	
 	@NotNull
 	@Size(min=4, max=20)
-	@Column(length=20)
+	@Column(length=20, unique = true)
 	private String name;
 	
 	@Lob
@@ -42,7 +42,8 @@ public class Pizza {
 	@Column
 	private int price;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany
+	@JsonIgnore
 	private Set<Ingredient> ingredients;
 	
 	public Pizza() {}

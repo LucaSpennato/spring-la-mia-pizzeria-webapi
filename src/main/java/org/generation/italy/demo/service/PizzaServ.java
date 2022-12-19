@@ -17,8 +17,8 @@ public class PizzaServ {
 	@Autowired
 	private PizzaRepo pr;
 	
-	public void save(Pizza p) {
-		pr.save(p);
+	public Pizza save(Pizza p) {
+		return pr.save(p);
 	}
 	
 	public void delete(Pizza p) {
