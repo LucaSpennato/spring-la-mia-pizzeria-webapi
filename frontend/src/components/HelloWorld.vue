@@ -2,104 +2,94 @@
   
   <div class="container">
     <div class="row">
+
+      <div class="col-10 m-auto pt-5 pb-2">
+
+        <div v-if="!pizzaCreateForm">
+          <button class="btn btn-success" @click="pizzaCreateForm = true">Add a new Pizza</button>
+        </div>
+        <div v-else class="row">
+          <div v-if="errorCreateCheck">
+            {{ errorCreate }}
+          </div>
+            <form @submit.prevent="createPizza" class="col-5 m-4">   
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Name</span>
+                <input type="text" class="form-control" name="name" v-model="pizzaCreate.name">
+              </div>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" name="price" v-model="pizzaCreate.price">
+                <span class="input-group-text">.00</span>
+              </div>
+
+              <div class="input-group">
+                <span class="input-group-text">Description</span>
+                <textarea class="form-control" v-model="pizzaCreate.description"></textarea>
+              </div>
+
+             
+              <div class="mt-3">
+                <button class="btn btn-success mx-2" type="submit">Create</button>
+                <button class="btn btn-danger" @click="pizzaCreateForm = false">Cancel</button>
+              </div>
+
+          </form>
+        </div>
       <div class="col-12 mt-5">
         <SearchComp  @emitSearch="searchPizza"/>
       </div>
 
-      <div class="col-10 m-auto py-5 my-5">
-
-        <div v-if="!pizzaCreateForm">
-          <button class="btn btn-success" @click="pizzaCreateForm = true">Add</button>
-        </div>
-        <div v-else>
-          <div v-if="errorCreateCheck">
-            {{ errorCreate }}
-          </div>
-            <form @submit.prevent="createPizza">
-
-              <div>
-                <label for="name">Name</label>
-                <br>
-                <input type="text" name="name" v-model="pizzaCreate.name">
-              </div>
-   
-              <div>
-                <label for="description">Description</label>
-                <br>
-                <input type="text" name="description" v-model="pizzaCreate.description">
-              </div>
-          
-              <div class="mb-3">
-                <label for="price">Price</label>
-                <br>
-                <input type="number" name="price" v-model="pizzaCreate.price">
-              </div>
-             
-              <button class="btn btn-success mx-2" type="submit">Create</button>
-              <button class="btn btn-danger" @click="pizzaCreateForm  = false">Cancel</button>
-
-          </form>
-        </div>
-
-        <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Price</th>
-            <th scope="col">Ingredients</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-
-          <tbody v-if="pizzeCheck">
-
-            <tr v-for="pizza in pizzas" :key="pizza.id">
-              <div v-if="isEditing != pizza.id">
-                <th scope="row">{{ pizza.id }}</th>
-                <td>{{ pizza.name }}</td>
-                <td>{{ pizza.description }}</td>
-                <td>{{ pizza.price }} $ </td>
+      <div v-if="pizzeCheck">
+       <div class="row">
+        <div class="card m-3 col-5" v-for="pizza in pizzas" :key="pizza.id">
+          <div class="card-body" v-if="isEditing != pizza.id">
+            <h5 class="text-capitalize card-title">{{ pizza.name }}</h5>
+            <h5 class="text-capitalize card-title">{{ pizza.price }} $</h5>
+            <h6 class="text-capitalize card-subtitle mb-2 text-muted">
+              <div v-if="pizza.ingredients">
+                <span v-for="i in pizza.ingredients" :key="i.id">{{ i.name }} </span>                
               </div>
               <div v-else>
-                <form @submit.prevent="updatePizza()">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" v-model="pizza.name">
-                    <br> 
-                    <label for="description">Description</label>
-                    <input type="text" name="description" v-model="pizza.description">
-                    <br>
-                    <label for="price">Price</label>
-                    <input type="number" name="price" v-model="pizza.price">
-                    <br><br>
-                    <button type="submit" class="btn btn-success">Update</button>
-                    <button @click="isEditingPizza(-1)" class="btn btn-warning">Cancel</button>
-                  </form>
+                <button class="btn btn-primary" @click="getIngredients(pizza.id)">Get Ingredients</button>
+              </div>
+            </h6>
+            <p class="card-text">{{ pizza.description }}</p>
+            <button class="btn btn-success me-2" @click="isEditingPizza(pizza.id)">Edit</button>
+            <button class="btn btn-danger" @click="deletePizza(pizza.id)">Delete</button>
+          </div>
+
+          <div class="card-body" v-else>
+            <form @submit.prevent="updatePizza()">
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Name</span>
+                <input type="text" class="form-control" name="name" v-model="pizza.name">
               </div>
 
-              <td>
-                <div v-if="pizza.ingredients">
-                  <span v-for="i in pizza.ingredients" :key="i.id">{{ i.name }} </span>                
-                </div>
-                <div v-else>
-                  <button class="btn btn-primary" @click="getIngredients(pizza.id)">Get Ingredients</button>
-                </div>
-              </td>
+              <div class="input-group mb-3">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" name="price" v-model="pizza.price">
+                <span class="input-group-text">.00</span>
+              </div>
 
-              <td>
-                <button class="btn btn-success me-2" @click="isEditingPizza(pizza.id)">Edit</button>
-                <button class="btn btn-danger" @click="deletePizza(pizza.id)">Delete</button>
-              </td>
-            </tr>
-
-          </tbody>
-          <div v-else>
-            <h5 class="py-5">
-              Non ci sono pizze.
-            </h5>
+              <div class="input-group">
+                <span class="input-group-text">Description</span>
+                <textarea class="form-control" v-model="pizza.description"></textarea>
+              </div>
+           
+              <div class="mt-4">
+                <button type="submit" class="btn btn-success me-2">Update</button>
+                <button @click="isEditingPizza(-1)" class="btn btn-warning">Cancel</button>
+              </div>
+            </form>
           </div>
-      </table>
+        </div>
+       </div>
+      </div>
+      <div v-else>
+        Non ci sono pizze.
+      </div>
       </div>
     </div>
 
